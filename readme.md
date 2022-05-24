@@ -27,15 +27,20 @@ Product Link ：[]()
 
 Wiki Link : []()
 
-The 3.5" 320x480 TFT LCD driver is ILI9488, it uses 16bits parallel line for communication with ESP32-S2, the main clock could be up to 20MHz, make the display smooth enough for videos; You can freely use some of Mabee pins(A I2c and a IOs) with the breakout connectors, to connect the ESP32-S2 display with sensors/ actuators, suitable for IoT applications.
+The 3.5" 320x480 TFT LCD driver is ILI9488, it uses 16bits parallel line for communication with ESP32-S3, the main clock could be up to 20MHz, make the display smooth enough for videos; You can freely use some of Mabee pins(A I2c and a IOs) with the breakout connectors, to connect the ESP32-S3 display with sensors/ actuators, suitable for IoT applications.
 
 ![back](md_pic/back.jpg)
 
 ## Feature
 
-- Integrated ESP32-S3 with 2.4G WiFi
-- Wi-Fi Protocols: 802.11b/g/n(802.11n up to 150Mbps),A-MPDU and A-MSDU aggregation and 0.4us guard interval support
-- Wi-Fi Frequency range: 2.402GHz - 2.483Ghz
+- Wi-Fi (2.4 GHz band)
+- Bluetooth Low Energy
+- Dual high performance Xtensa® 32-bit LX7 CPU cores
+- Ultra Low Power co-processor running either RISC-V or FSM core
+- Multiple peripherals
+- Built-in security hardware
+- USB OTG interface
+- USB Serial/JTAG Controller
 - Arduino Compatible: You can play it with Arduino IDE
 - LCD 3.5 inch Amorphous-TFT-LCD (Thin Film Transistor Liquid Crystal Display) for mobile-phone or handy electrical equipment
 - LCD Driver: ILI9488(16bits parallel line)
