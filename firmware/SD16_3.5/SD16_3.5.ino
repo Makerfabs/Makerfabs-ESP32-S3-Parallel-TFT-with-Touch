@@ -4,6 +4,7 @@
 #include "SD.h"
 #include "SPI.h"
 #include <LovyanGFX.hpp>
+#include <PNGdec.h>
 
 #define I2C_SCL 39
 #define I2C_SDA 38
@@ -31,7 +32,6 @@ const int i2c_touch_addr = TOUCH_I2C_ADD;
 #define LCD_CS 37
 #define LCD_BLK 45
 
-
 class LGFX : public lgfx::LGFX_Device
 {
     // lgfx::Panel_ILI9341 _panel_instance;
@@ -48,7 +48,7 @@ public:
 
             // 16位设置
             cfg.port = 0;              // 使用するI2Sポートを選択 (0 or 1) (ESP32のI2S LCDモードを使用します)
-            cfg.freq_write = 20000000; // 送信クロック (最大20MHz, 80MHzを整数で割った値に丸められます)
+            cfg.freq_write = 40000000; // 送信クロック (最大20MHz, 80MHzを整数で割った値に丸められます)
             cfg.pin_wr = 35;           // WR を接続しているピン番号
             cfg.pin_rd = 48;           // RD を接続しているピン番号
             cfg.pin_rs = 36;           // RS(D/C)を接続しているピン番号
@@ -105,9 +105,60 @@ public:
     }
 };
 
+PNG png;
 LGFX lcd;
 int pos[2] = {0, 0};
 int err_code = 0;
+
+// Functions to access a file on the SD card
+File myfile;
+
+void * myOpen(const char *filename, int32_t *size) {
+  Serial.printf("Attempting to open %s\n", filename);
+  myfile = SD.open(filename);
+  *size = myfile.size();
+  return &myfile;
+}
+void myClose(void *handle) {
+  if (myfile) myfile.close();
+}
+int32_t myRead(PNGFILE *handle, uint8_t *buffer, int32_t length) {
+  if (!myfile) return 0;
+  return myfile.read(buffer, length);
+}
+int32_t mySeek(PNGFILE *handle, int32_t position) {
+  if (!myfile) return 0;
+  return myfile.seek(position);
+}
+
+// Function to draw pixels to the display
+void PNGDraw(PNGDRAW *pDraw) {
+lgfx::swap565_t usPixels[480];
+
+  png.getLineAsRGB565(pDraw, (uint16_t *)usPixels, PNG_RGB565_BIG_ENDIAN, 0xffffffff);
+  lcd.pushPixels(usPixels, pDraw->iWidth);
+}
+//
+// Decode and display a PNG file given a name on the SD card
+//
+void show_png(const char *fname)
+{
+int rc;
+
+   rc = png.open(fname, myOpen, myClose, myRead, mySeek, PNGDraw);
+   if (rc == PNG_SUCCESS) {
+      int cx, cy;
+      Serial.printf("image specs: (%d x %d), %d bpp, pixel type: %d\n", png.getWidth(), png.getHeight(), png.getBpp(), png.getPixelType());
+      lcd.setColorDepth(16);
+      lcd.startWrite();
+      cx = (480 - png.getWidth())/2; // center it on the LCD
+      cy = (320 - png.getHeight())/2;
+      lcd.setAddrWindow(cx, cy, png.getWidth(), png.getHeight());
+      rc = png.decode(NULL, 0);
+      png.close();
+      lcd.endWrite();
+    }
+} /* show_png() */
 
 void setup()
 {
@@ -194,8 +245,8 @@ void setup()
     }
 
     lcd.setRotation(3);
-    print_img(SD, "/logo.bmp", 480, 320);
-}
+    show_png("/makerfabs_logo.png");
+} /* setup() */
 
 void loop()
 {
@@ -210,7 +261,8 @@ void loop()
 int SD_init()
 {
 
-    if (!SD.begin(SD_CS))
+//    if (!SD.begin(SD_CS))
+    if (!SD.begin(SD_CS, SPI, 40000000))
     {
         Serial.println("Card Mount Failed");
         return 1;
@@ -347,67 +399,6 @@ void appendFile(fs::FS &fs, const char *path, const char *message)
         Serial.println("Append failed");
     }
     file.close();
-}
-
-//Display image from file
-int print_img(fs::FS &fs, String filename, int x, int y)
-{
-    File f = fs.open(filename, "r");
-    if (!f)
-    {
-        Serial.println("Failed to open file for reading");
-        f.close();
-        return 0;
-    }
-
-    f.seek(54);
-    int X = x;
-    int Y = y;
-    uint8_t RGB[3 * X];
-    for (int row = 0; row < Y; row++)
-    {
-        f.seek(54 + 3 * X * row);
-        f.read(RGB, 3 * X);
-        lcd.pushImage(0, row, X, 1, (lgfx::rgb888_t *)RGB);
-    }
-
-    f.close();
-    return 0;
-}
-
-//Display image from file
-//BMP is 32 bit...
-int print_img_small(fs::FS &fs, String filename, int x, int y, int w, int h)
-{
-    File f = fs.open(filename, "r");
-    if (!f)
-    {
-        Serial.println("Failed to open file for reading");
-        f.close();
-        return 0;
-    }
-
-    f.seek(54);
-    int X = w;
-    int Y = h;
-    uint8_t RGB[3 * X];
-    uint8_t RGBA[4 * X];
-    for (int row = 0; row < Y; row++)
-    {
-        f.seek(54 + 4 * X * row);
-        f.read(RGBA, 4 * X);
-
-        for (int i = 0; i < X; i++)
-        {
-            RGB[3 * i] = RGBA[4 * X - 4 * i - 4];
-            RGB[3 * i + 1] = RGBA[4 * X - 4 * i - 3];
-            RGB[3 * i + 2] = RGBA[4 * X - 4 * i - 2];
-        }
-        lcd.pushImage(x, y + row, X, 1, (lgfx::rgb888_t *)RGB);
-    }
-
-    f.close();
-    return 0;
 }
 
 //transform touch screen pos
