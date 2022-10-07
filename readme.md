@@ -2,11 +2,11 @@
 
 ```c++
 /*
-Version:		V1.0
+Version:		V1.1
 Author:			Vincent
 Create Date:	2022/5/24
 Note:
-	
+	2022/10/7	V1.1:Add USB HID example.
 */
 ```
 ![](md_pic/main.gif)
@@ -72,3 +72,15 @@ The 3.5" 320x480 TFT LCD driver is ILI9488, it uses 16bits parallel line for com
 ### SD16_3.5
 
 Factory firmware. First run the boot self-test to check the hardware. Press down the middle of the touch screen as prompted to display a LOGO picture on the SD card. Finally, print the touch coordinates in the serial port.
+
+
+
+## Example
+
+### touch_keyboard
+
+The ESP32S3 native USB is used, which can be used as a USB HID to simulate a keyboard.
+
+You can input text, key combination, enter key, and connect to the NTP server through WiFi, output real-time time.
+
+ 
