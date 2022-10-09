@@ -2,10 +2,11 @@
 
 ```c++
 /*
-Version:		V1.1
+Version:		V1.2
 Author:			Vincent
 Create Date:	2022/5/24
 Note:
+	2022/10/7	V1.2:Add USB HID example.
 	2022/10/7	V1.1:Add USB HID example.
 */
 ```
@@ -82,5 +83,9 @@ Factory firmware. First run the boot self-test to check the hardware. Press down
 The ESP32S3 native USB is used, which can be used as a USB HID to simulate a keyboard.
 
 You can input text, key combination, enter key, and connect to the NTP server through WiFi, output real-time time.
+
+ ### touch_keyboard V2.0
+
+Added an inherited three custom keyboard keyboard Demo, including text input + key combination, numeric keypad, arrow keys + space.
 
  
