@@ -80,6 +80,11 @@ void main_page()
         drawButton(b[i]);
     }
 
+    lcd.setTextSize(8);
+    lcd.setCursor(10, 360);
+    lcd.setTextColor(0xFE07);
+    lcd.print("16Bit");
+
     while (1)
     {
         ft6236_pos(pos);
@@ -500,4 +505,3 @@ void key_input_3(int value)
     delay(100);
     Keyboard.releaseAll();
 }
-
