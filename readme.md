@@ -2,10 +2,11 @@
 
 ```c++
 /*
-Version:		V1.2
+Version:		V1.3
 Author:			Vincent
 Create Date:	2022/5/24
 Note:
+	2022/12/29	V1.3:Change wiki link.
 	2022/10/7	V1.2:Add USB HID example.
 	2022/10/7	V1.1:Add USB HID example.
 */
@@ -19,14 +20,14 @@ Note:
 
 [Makerfabs home page](https://www.makerfabs.com/)
 
-[Makerfabs Wiki](https://makerfabs.com/wiki/index.php?title=Main_Page)
+[Makerfabs Wiki](https://wiki.makerfabs.com/)
 
 # Makerfabs ESP32-S3 Parallel TFT with Touch
 ## Intruduce
 
 Product Link ：[ESP32-S3 Parallel TFT with Touch 3.5'' ILI9488](https://www.makerfabs.com/esp32-s3-parallel-tft-with-touch-ili9488.html)
 
-Wiki Link : []()
+Wiki Link : [ESP32-S3 Parallel 3.5'' TFT with Touch](https://wiki.makerfabs.com/ESP32_S3_Parallel_3.5_TFT_with_Touch.html)
 
 The 3.5" 320x480 TFT LCD driver is ILI9488, it uses 16bits parallel line for communication with ESP32-S3, the main clock could be up to 20MHz, make the display smooth enough for videos; You can freely use some of Mabee pins(A I2c and a IOs) with the breakout connectors, to connect the ESP32-S3 display with sensors/ actuators, suitable for IoT applications.
 
