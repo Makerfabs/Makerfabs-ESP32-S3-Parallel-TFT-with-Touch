@@ -28,7 +28,7 @@ const int i2c_touch_addr = TOUCH_I2C_ADD;
 #define SPI_SCK 42
 #define SD_CS 1 //2
 
-#define LCD_CS 37
+#define LCD_CS 46
 #define LCD_BLK 45
 
 

@@ -9,7 +9,7 @@
 #include "ESPAsyncWebServer.h"
 
 LGFX lcd;
-#define LCD_CS 37
+#define LCD_CS 46
 #define LCD_BLK 45
 
 // Replace with your network credentials
