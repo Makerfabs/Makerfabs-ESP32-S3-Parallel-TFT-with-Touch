@@ -1,7 +1,7 @@
 #define LGFX_USE_V1
 #include <LovyanGFX.hpp>
 
-#define LCD_CS 37
+#define LCD_CS 46
 #define LCD_BLK 45
 
 class LGFX : public lgfx::LGFX_Device
