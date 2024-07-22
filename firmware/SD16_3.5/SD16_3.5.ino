@@ -49,9 +49,9 @@ public:
             // 16位设置
             cfg.port = 0;              // 使用するI2Sポートを選択 (0 or 1) (ESP32のI2S LCDモードを使用します)
             cfg.freq_write = 20000000; // 送信クロック (最大20MHz, 80MHzを整数で割った値に丸められます)
-            cfg.pin_wr = 35;           // WR を接続しているピン番号
+            cfg.pin_wr = 18;           // WR を接続しているピン番号
             cfg.pin_rd = 48;           // RD を接続しているピン番号
-            cfg.pin_rs = 36;           // RS(D/C)を接続しているピン番号
+            cfg.pin_rs = 17;           // RS(D/C)を接続しているピン番号
 
             cfg.pin_d0 = 47;
             cfg.pin_d1 = 21;
