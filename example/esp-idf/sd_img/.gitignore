@@ -5,4 +5,6 @@ sdkconfig.old
 __pycache__/
 
 
+.vscode/
 managed_components/
+dependencies.lock
