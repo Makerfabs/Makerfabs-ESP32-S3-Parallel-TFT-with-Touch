@@ -1,0 +1,47 @@
+menu "Makerfabs Project"
+
+
+choice BOARD_TYPE
+    prompt "Board Type"
+    default BOARD_TYPE_MATOUCH_1_8_S3
+    help
+        Board type.
+
+    config BOARD_TYPE_MATOUCH_2_8_S3
+        bool "matouch-2-8-s3"
+        depends on IDF_TARGET_ESP32S3
+        select AUDIO_ENABLE
+    config BOARD_TYPE_MATOUCH_1_8_S3
+        bool "matouch-1-8-s3"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_MATOUCH_3_16_S3
+        bool "matouch-3-16-s3"
+        depends on IDF_TARGET_ESP32S3
+        select QMI8658_ENABLE
+        select AUDIO_ENABLE
+        select SDCARD_ENABLE
+        select PCF85063A_ENABLE
+    config BOARD_TYPE_MATOUCH_3_5_SPI_S3
+        bool "matouch-3-5-spi-s3"
+        depends on IDF_TARGET_ESP32S3
+        select SDCARD_ENABLE
+    config BOARD_TYPE_MATOUCH_3_5_8080_S3
+        bool "matouch-3-5-8080-s3"
+        depends on IDF_TARGET_ESP32S3
+        select SDCARD_ENABLE
+endchoice
+
+choice DEVELOPMENT_MODE
+    prompt "Development Mode"
+    default DEVELOPMENT_MODE_DEBUG
+    help
+        Development Mode.
+
+    config DEVELOPMENT_MODE_DEBUG
+        bool "Debug"
+    config DEVELOPMENT_MODE_RELEASE
+        bool "Release"
+endchoice
+
+
+endmenu

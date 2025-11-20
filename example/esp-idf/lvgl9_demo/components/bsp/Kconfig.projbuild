@@ -1,0 +1,33 @@
+menu "Board Configuration"
+
+    config SPIFFS_ENABLE
+        bool "Enable SPIFFS filesystem support"
+        default n
+        help
+            Enable SPIFFS filesystem support
+    
+    config SDCARD_ENABLE
+        bool "Enable SD Card support"
+        default n
+        help
+            Enable SD Card support
+
+    config AUDIO_ENABLE
+        bool "Enable Audio Codec support"
+        default n
+        help
+            Enable Audio Codec support
+
+    config QMI8658_ENABLE
+        bool "Enable QMI8658 Accelerometer support"
+        default n
+        help
+            Enable QMI8658 Accelerometer support
+
+    config PCF85063A_ENABLE
+        bool "Enable PCF85063A RTC support"
+        default n
+        help
+            Enable PCF85063A RTC support
+
+endmenu
