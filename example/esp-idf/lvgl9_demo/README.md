@@ -11,3 +11,7 @@ Set espressif Device Target **ESP32S3**
 Use USB-C to connect the board and PC, select the corresponding port and Flash Device.
 
 ![image-20251120163625935](https://easyimage.linwanrong.com/i/2025/11/20/r27snw-0.webp)
+
+**Result**
+
+![lvgl_widgets](https://easyimage.linwanrong.com/i/2025/11/20/tsgq0b-0.gif)
