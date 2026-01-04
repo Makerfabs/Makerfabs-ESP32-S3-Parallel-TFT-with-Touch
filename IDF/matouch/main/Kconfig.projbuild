@@ -1,0 +1,64 @@
+menu "Makerfabs Project"
+
+
+choice BOARD_TYPE
+    prompt "Board Type"
+    default BOARD_TYPE_3_5_IlI9488_FT6236
+    help
+        Board type. 开发板类型
+
+    config BOARD_TYPE_3_5_IlI9488_FT6236
+        bool "3-5-ili9488-ft6236"
+        depends on IDF_TARGET_ESP32S3
+        select SDCARD_ENABLE
+    config BOARD_TYPE_1_28_GC9A01_CST816S
+        bool "1-28-gc9a01-cst816s"
+        depends on IDF_TARGET_ESP32S3
+        select PCF85063A_ENABLE
+    config BOARD_TYPE_2_8_ST7798V_GT911
+        bool "2-8-st7798v-gt911"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_4_3_UNKNOWN_GT911
+        bool "4-3-unknown-gt911"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_7_0_UNKNOWN_GT911
+        bool "7-0-unknown-gt911"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_7_0_JD9165_GT911
+        bool "7-0-jd9165-gt911"
+        depends on IDF_TARGET_ESP32P4
+endchoice
+
+if BOARD_TYPE_3_5_IlI9488_FT6236
+
+    choice 3_5_IlI9488_FT6236_INTERFACE_TYPE
+    prompt "ILI9488 Interface Type"
+    default 3_5_IlI9488_SPI_FT6236
+    
+    config 3_5_IlI9488_80_FT6236
+        bool "8080 Parallel Interface"
+        help
+            Use 16-bit parallel interface (8080) for ILI9488 display
+
+    config 3_5_IlI9488_SPI_FT6236
+        bool "SPI Interface"
+        help
+            Use SPI interface for ILI9488 display
+
+    endchoice
+endif
+
+choice DEVELOPMENT_MODE
+    prompt "Development Mode"
+    default DEVELOPMENT_MODE_RELEASE
+    help
+        Development Mode
+
+    config DEVELOPMENT_MODE_DEBUG
+        bool "Debug"
+    config DEVELOPMENT_MODE_RELEASE
+        bool "Release"
+endchoice
+
+
+endmenu

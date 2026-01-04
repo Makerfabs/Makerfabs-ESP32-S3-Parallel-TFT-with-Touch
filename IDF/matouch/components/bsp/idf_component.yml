@@ -1,0 +1,8 @@
+## IDF Component Manager Manifest File
+dependencies:
+  waveshare/qmi8658: 1.0.1
+  waveshare/pcf85063a: 1.0.1
+
+  chmorgan/esp-audio-player: 1.0.7
+
+  espressif/esp32-camera: 2.1.4

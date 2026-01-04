@@ -1,0 +1,135 @@
+#include "bsp_pcf8563.h"
+#include <esp_log.h>
+
+
+static const char *TAG = "bsp_pcf8563";
+
+static bsp_pcf8563_handle_t _g_handle = NULL;
+
+#define PCF8563_REG_VL_SECONDS 0x02
+#define PCF8563_CMD_START      0x02 // 时间寄存器起始地址
+
+
+typedef struct {
+    bsp_pcf8563_handle_t handle;
+}bsp_pcf8563_local_t;
+
+
+// 辅助函数：BCD转十进制
+static uint8_t bcd2dec(uint8_t val) {
+    return ((val >> 4) * 10) + (val & 0x0f);
+}
+
+// 辅助函数：十进制转BCD
+static uint8_t dec2bcd(uint8_t val) {
+    return ((val / 10) << 4) + (val % 10);
+}
+
+esp_err_t _get_time_data(struct tm *timeinfo) 
+{
+    esp_err_t ret = ESP_OK;
+    if (!timeinfo) return ESP_ERR_INVALID_ARG;
+    if (xSemaphoreTake(_g_handle->lock, pdMS_TO_TICKS(PCF8563_LOCK_TIMEOUT_MS)) != pdTRUE) {
+        return ESP_ERR_TIMEOUT;
+    }
+    uint8_t reg_addr = PCF8563_CMD_START;
+    uint8_t data[7]; // 秒, 分, 时, 日, 星期, 月/世纪, 年
+
+    // I2C Write (寄存器地址) then Read (数据)
+    ret = i2c_master_transmit_receive(_g_handle->dev_handle, &reg_addr, 1, data, 7, -1);
+    if (ret != ESP_OK) {
+        xSemaphoreGive(_g_handle->lock);
+        return ret;
+    }
+
+    // 解析数据 (注意屏蔽无效位，如VL位)
+    timeinfo->tm_sec  = bcd2dec(data[0] & 0x7F);
+    timeinfo->tm_min  = bcd2dec(data[1] & 0x7F);
+    timeinfo->tm_hour = bcd2dec(data[2] & 0x3F);
+    timeinfo->tm_mday = bcd2dec(data[3] & 0x3F);
+    timeinfo->tm_wday = data[4] & 0x07;
+    timeinfo->tm_mon  = bcd2dec(data[5] & 0x1F) - 1; // tm_mon is 0-11
+    
+    // PCF8563 年份是 0-99。根据 Century 位判断年份
+    // 简单处理：假设是2000年后。data[5] bit 7 是世纪位
+    int year = bcd2dec(data[6]);
+    timeinfo->tm_year = year + 100; // 1900 + 100 + year = 20xx
+
+    xSemaphoreGive(_g_handle->lock);
+
+    return ESP_OK;
+}
+
+esp_err_t _set_time_data(const struct tm *timeinfo) 
+{
+    esp_err_t ret = ESP_OK;
+
+    if (!timeinfo) return ESP_ERR_INVALID_ARG;
+    if (xSemaphoreTake(_g_handle->lock, pdMS_TO_TICKS(PCF8563_LOCK_TIMEOUT_MS)) != pdTRUE) {
+        return ESP_ERR_TIMEOUT;
+    }
+    uint8_t data[8];
+    data[0] = PCF8563_CMD_START; // 写入起始地址 0x02
+    
+    data[1] = dec2bcd(timeinfo->tm_sec);     // 0x02 Seconds
+    data[2] = dec2bcd(timeinfo->tm_min);     // 0x03 Minutes
+    data[3] = dec2bcd(timeinfo->tm_hour);    // 0x04 Hours
+    data[4] = dec2bcd(timeinfo->tm_mday);    // 0x05 Days
+    data[5] = timeinfo->tm_wday;             // 0x06 Weekdays
+    data[6] = dec2bcd(timeinfo->tm_mon + 1); // 0x07 Month
+    
+    // 年份处理：tm_year 是从1900开始的
+    int year = timeinfo->tm_year - 100; // 获取20xx的后两位
+    if (year < 0) year = 0;
+    data[7] = dec2bcd(year);                 // 0x08 Year
+
+    ret = i2c_master_transmit(_g_handle->dev_handle, data, 8, -1);
+
+    xSemaphoreGive(_g_handle->lock);
+
+    return ret;
+}
+
+esp_err_t bsp_pcf8563_init(bsp_pcf8563_handle_t *handle, i2c_master_bus_handle_t bus_handle)
+{
+    esp_err_t ret = ESP_OK;
+
+    if(bus_handle == NULL) {
+        ESP_LOGE(TAG, "Invalid I2C bus handle");
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    bsp_pcf8563_handle_t _handle = (bsp_pcf8563_handle_t)malloc(sizeof(struct bsp_pcf8563_t));
+    if(!_handle) return ESP_ERR_NO_MEM;
+
+    i2c_device_config_t dev_config = {
+        .dev_addr_length = I2C_ADDR_BIT_LEN_7,
+        .device_address = 0x51,
+        .scl_speed_hz = 100000,
+    };
+
+    ret = i2c_master_bus_add_device(bus_handle, &dev_config, &_handle->dev_handle);
+
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize PCF8563 RTC");
+        free(_handle);
+        return ret;
+    }
+
+    _handle->get_time_data     = _get_time_data; // To be implemented
+    _handle->set_time_data     = _set_time_data; // To be implemented
+
+    _handle->lock = xSemaphoreCreateMutex();
+    if (!_handle->lock) {
+        ESP_LOGE(TAG, "Failed to create semaphore");
+        free(_handle);
+        return ESP_ERR_NO_MEM;
+    }
+
+    *handle = _handle;
+    _g_handle = _handle;
+
+    ESP_LOGI(TAG, "PCF8563 RTC initialized successfully");
+
+    return ret;
+}

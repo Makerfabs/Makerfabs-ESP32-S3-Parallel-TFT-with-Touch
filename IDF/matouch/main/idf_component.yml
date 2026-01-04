@@ -1,0 +1,57 @@
+## IDF Component Manager Manifest File
+dependencies:
+  ## Required IDF version
+  idf:
+    version: ^5.4
+  # # Put list of dependencies here
+  # # For components maintained by Espressif:
+  # component: "~1.0.0"
+  # # For 3rd party components:
+  # username/component: ">=1.0.0,<2.0.0"
+  # username2/component2:
+  #   version: "~1.0.0"
+  #   # For transient dependencies `public` flag can be set.
+  #   # `public` flag doesn't have an effect dependencies of the `main` component.
+  #   # All dependencies of `main` are public by default.
+  #   public: true
+  espressif/esp_lvgl_port: 2.6.2
+  lvgl/lvgl: 9.3.0
+
+  # wifi connect
+  protocol_examples_common:
+    path: ${IDF_PATH}/examples/common_components/protocol_examples_common
+
+  chmorgan/esp-file-iterator: 1.0.0
+
+  # 3_5_ili9488-80&spi_ft6236
+  atanisoft/esp_lcd_ili9488: ^1.0.11
+  cfscn/esp_lcd_touch_ft6x36: ^1.0.8
+
+  # 1-28-gc9a01-cst816s
+  espressif/esp_lcd_gc9a01: 2.0.4
+  espressif/esp_lcd_touch_cst816s: 1.1.0
+
+  # 2-8-st7798v-gt911
+  espressif/esp_lcd_touch_gt911: 1.1.3
+    # path: ../components/espressif__esp_lcd_touch_gt911
+
+  # 4_3_unkown-gt911
+  # espressif/esp_lcd_touch_gt911: 1.1.3
+
+  # 7_0_unkown-gt911
+  # espressif/esp_lcd_touch_gt911: 1.1.3
+
+  # 7_0_jd9165-gt911
+  espressif/esp_lcd_jd9165: 
+    path: ../components/espressif__esp_lcd_jd9165
+
+  espressif/libjpeg-turbo:
+    path: ../components/espressif__libjpeg-turbo
+
+
+  # sensor
+  # zorxx/dht: 1.0.2
+  # esp-idf-lib/sht3x: 1.0.8
+  # espressif/mpu6050: 1.2.1
+  # k0i05/esp_mpu6050: 1.2.7
+

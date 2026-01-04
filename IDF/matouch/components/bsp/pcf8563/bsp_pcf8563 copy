@@ -1,0 +1,27 @@
+#pragma once
+
+#pragma once
+
+#include <esp_err.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/semphr.h>
+#include <driver/i2c_master.h>
+#include <time.h>
+
+#define PCF8563_LOCK_TIMEOUT_MS 2000
+
+typedef struct bsp_pcf8563_t *bsp_pcf8563_handle_t;
+
+struct bsp_pcf8563_t {
+
+    i2c_master_dev_handle_t dev_handle;
+
+    esp_err_t (*get_time_data)(struct tm *timeinfo);
+    esp_err_t (*set_time_data)(const struct tm *timeinfo);
+
+    /* mutex */
+    SemaphoreHandle_t lock;
+}; 
+
+/* Create/Destroy */
+esp_err_t bsp_pcf8563_init(bsp_pcf8563_handle_t *handle, i2c_master_bus_handle_t bus_handle);
