@@ -1,11 +1,11 @@
 # Example Description
 This project includes example code for some MaTouch products.
-- [**MaTouch 1.28" ToolSet_Controller**](https://www.makerfabs.com/matouch-1-28-toolset-controller.html)
-- [**MaTouch_ESP32-S3 Parallel TFT with Touch 4.3"**](https://www.makerfabs.com/esp32-s3-parallel-tft-with-touch-4-3-inch.html)
-- [**Makerfabs-ESP32-S3-SPI-TFT-with-Touch**](https://www.makerfabs.com/esp32-s3-spi-tft-with-touch-ili9488.html)
-- [**Makerfabs-ESP32-S3-Parallel-TFT-with-Touch**](https://www.makerfabs.com/esp32-s3-parallel-tft-with-touch-ili9488.html)
+- [**MaTouch 1.28" ToolSet_Controller**](#matouch-128-toolset_controller)
+- [**MaTouch_ESP32-S3 Parallel TFT with Touch 4.3"**](#matouch_esp32-s3-parallel-tft-with-touch-43)
+- [**Makerfabs-ESP32-S3-SPI-TFT-with-Touch**](#makerfabs-esp32-s3-spi-tft-with-touch)
+- [**Makerfabs-ESP32-S3-Parallel-TFT-with-Touch**](#makerfabs-esp32-s3-parallel-tft-with-touch)
 
-This repository is suitable for the [**Makerfabs-ESP32-S3-Parallel-TFT-with-Touch**](https://www.makerfabs.com/esp32-s3-parallel-tft-with-touch-ili9488.html)
+This repository is suitable for the [**Makerfabs-ESP32-S3-Parallel-TFT-with-Touch**](#makerfabs-esp32-s3-parallel-tft-with-touch).
 
 ## How to use example
 #### MaTouch 1.28" ToolSet_Controller
